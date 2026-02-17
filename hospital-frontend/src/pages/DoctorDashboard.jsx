@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getAppointments, updateAppointment } from '../services/api';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 function DoctorDashboard() {
   const [appointments, setAppointments] = useState([]);
@@ -30,24 +36,24 @@ function DoctorDashboard() {
   };
 
   return (
-    <div>
-      <h2>Doctor Dashboard</h2>
-      {error && <p style={{color:'red'}}>{error}</p>}
-      <h3>Assigned Appointments</h3>
-      <ul>
+    <Box sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>Doctor Dashboard</Typography>
+      {error && <Typography color="error">{error}</Typography>}
+      <Typography variant="h6" sx={{ mt: 4 }}>Assigned Appointments</Typography>
+      <List>
         {appointments.map((a) => (
-          <li key={a._id}>
-            {a.date} {a.timeSlot} with {a.patientName} - {a.status}
+          <ListItem key={a._id}>
+            <ListItemText primary={`${a.date} ${a.timeSlot} with ${a.patientName} - ${a.status}`} />
             {a.status === 'pending' && (
               <>
-                <button onClick={() => handleStatus(a._id, 'approved')}>Approve</button>
-                <button onClick={() => handleStatus(a._id, 'rejected')}>Reject</button>
+                <Button onClick={() => handleStatus(a._id, 'approved')} variant="contained" color="success" sx={{ mr: 1 }}>Approve</Button>
+                <Button onClick={() => handleStatus(a._id, 'rejected')} variant="contained" color="error">Reject</Button>
               </>
             )}
-          </li>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   );
 }
 

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { register } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
 
 function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'patient' });
@@ -22,20 +27,20 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <Box sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>Register</Typography>
       <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" onChange={handleChange} required />
-        <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
-        <select name="role" onChange={handleChange} value={form.role}>
-          <option value="patient">Patient</option>
-          <option value="doctor">Doctor</option>
-        </select>
-        <button type="submit">Register</button>
+        <TextField name="name" label="Name" fullWidth margin="normal" onChange={handleChange} required />
+        <TextField name="email" type="email" label="Email" fullWidth margin="normal" onChange={handleChange} required />
+        <TextField name="password" type="password" label="Password" fullWidth margin="normal" onChange={handleChange} required />
+        <TextField select name="role" label="Role" fullWidth margin="normal" onChange={handleChange} value={form.role}>
+          <MenuItem value="patient">Patient</MenuItem>
+          <MenuItem value="doctor">Doctor</MenuItem>
+        </TextField>
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>Register</Button>
       </form>
-      {error && <p style={{color:'red'}}>{error}</p>}
-    </div>
+      {error && <Typography color="error">{error}</Typography>}
+    </Box>
   );
 }
 
