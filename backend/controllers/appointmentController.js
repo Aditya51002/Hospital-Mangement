@@ -1,8 +1,4 @@
 const Appointment = require('../models/Appointment');
-
-// @desc   Book appointment (patient only)
-// @route  POST /api/appointments
-// @access Private (patient)
 const bookAppointment = async (req, res) => {
   try {
     const { doctorName, department, date, timeSlot } = req.body;
@@ -26,20 +22,16 @@ const bookAppointment = async (req, res) => {
   }
 };
 
-// @desc   Get appointments
-// @route  GET /api/appointments
-// @access Private (patient sees own | doctor sees all)
 const getAppointments = async (req, res) => {
   try {
     let appointments;
 
     if (req.user.role === 'doctor') {
-      // Doctor sees all appointments assigned to them by doctor name
+
       appointments = await Appointment.find({ doctorName: req.user.name }).sort({
         createdAt: -1
       });
     } else {
-      // Patient sees only their own appointments
       appointments = await Appointment.find({ patientId: req.user._id }).sort({
         createdAt: -1
       });
@@ -51,9 +43,7 @@ const getAppointments = async (req, res) => {
   }
 };
 
-// @desc   Get all appointments (for doctor dashboard - any doctor)
-// @route  GET /api/appointments/all
-// @access Private (doctor)
+
 const getAllAppointments = async (req, res) => {
   try {
     if (req.user.role !== 'doctor') {
@@ -67,9 +57,7 @@ const getAllAppointments = async (req, res) => {
   }
 };
 
-// @desc   Update appointment status (doctor only)
-// @route  PUT /api/appointments/:id
-// @access Private (doctor)
+
 const updateAppointmentStatus = async (req, res) => {
   try {
     if (req.user.role !== 'doctor') {
@@ -97,9 +85,4 @@ const updateAppointmentStatus = async (req, res) => {
   }
 };
 
-module.exports = {
-  bookAppointment,
-  getAppointments,
-  getAllAppointments,
-  updateAppointmentStatus
-};
+module.exports = {bookAppointment,getAppointments,getAllAppointments,updateAppointmentStatus};

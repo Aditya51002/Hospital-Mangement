@@ -8,20 +8,17 @@ const generateToken = (id, role) => {
   });
 };
 
-// @desc   Register a new user
-// @route  POST /api/auth/register
-// @access Public
 const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // Check if user already exists
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email is already registered' });
     }
 
-    // Create new user
+
     const user = await User.create({ name, email, password, role });
 
     const token = generateToken(user._id, user.role);
@@ -41,9 +38,7 @@ const register = async (req, res) => {
   }
 };
 
-// @desc   Login user
-// @route  POST /api/auth/login
-// @access Public
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -52,13 +47,13 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Please provide email and password' });
     }
 
-    // Find user
+  
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Compare password
+
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
