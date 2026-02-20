@@ -17,6 +17,11 @@ const appointmentSchema = new mongoose.Schema(
       required: [true, 'Doctor name is required'],
       trim: true
     },
+    doctorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
     department: {
       type: String,
       required: [true, 'Department is required'],

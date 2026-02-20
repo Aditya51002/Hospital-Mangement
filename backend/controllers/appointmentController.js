@@ -1,16 +1,23 @@
 const Appointment = require('../models/Appointment');
+const User = require('../models/User');
+
 const bookAppointment = async (req, res) => {
   try {
-    const { doctorName, department, date, timeSlot } = req.body;
+    const { doctorId, department, date, timeSlot } = req.body;
 
-    if (!doctorName || !department || !date || !timeSlot) {
+    if (!doctorId || !department || !date || !timeSlot) {
       return res.status(400).json({ message: 'All fields are required' });
+    }
+    const doctor = await User.findOne({ _id: doctorId, role: 'doctor' });
+    if (!doctor) {
+      return res.status(400).json({ message: 'Invalid doctor selection' });
     }
 
     const appointment = await Appointment.create({
       patientName: req.user.name,
       patientId: req.user._id,
-      doctorName,
+      doctorName: doctor.name,
+      doctorId: doctor._id,
       department,
       date,
       timeSlot
@@ -27,8 +34,7 @@ const getAppointments = async (req, res) => {
     let appointments;
 
     if (req.user.role === 'doctor') {
-
-      appointments = await Appointment.find({ doctorName: req.user.name }).sort({
+      appointments = await Appointment.find().sort({
         createdAt: -1
       });
     } else {
@@ -85,4 +91,13 @@ const updateAppointmentStatus = async (req, res) => {
   }
 };
 
-module.exports = {bookAppointment,getAppointments,getAllAppointments,updateAppointmentStatus};
+const getAllDoctors = async (req, res) => {
+  try {
+    const doctors = await User.find({ role: 'doctor' }).select('name _id');
+    res.json({ doctors });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = {bookAppointment,getAppointments,getAllAppointments,updateAppointmentStatus, getAllDoctors};

@@ -24,6 +24,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ['patient', 'doctor'],
       default: 'patient'
+    },
+    department: {
+      type: String,
+      required: false,
+      enum: [
+        'Cardiology',
+        'Neurology',
+        'Orthopedics',
+        'Pediatrics',
+        'Oncology',
+        'Dermatology',
+        'Psychiatry',
+        'General Medicine'
+      ]
     }
   },
   { timestamps: true }
@@ -36,7 +50,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Match password method
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

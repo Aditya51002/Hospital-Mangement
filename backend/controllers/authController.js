@@ -10,16 +10,18 @@ const generateToken = (id, role) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, department } = req.body;
 
+    if (role === 'doctor') {
+      return res.status(400).json({ message: 'Doctors cannot register themselves. Please contact admin.' });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email is already registered' });
     }
 
-
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({ name, email, password, role: 'patient', department });
 
     const token = generateToken(user._id, user.role);
 
@@ -30,7 +32,8 @@ const register = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        department: user.department
       }
     });
   } catch (error) {
@@ -68,7 +71,8 @@ const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        department: user.department
       }
     });
   } catch (error) {

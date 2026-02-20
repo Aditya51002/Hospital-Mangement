@@ -1,4 +1,4 @@
-# MediCare - Hospital Management System
+# HealthConnect - Hospital Management System
 
 A full-stack MERN Medical Appointment Management System with Role-Based Access Control.
 
