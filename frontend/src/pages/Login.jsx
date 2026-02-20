@@ -43,7 +43,7 @@ export default function Login() {
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg>
           </div>
-          <span className="brand-name">MediCare</span>
+          <span className="brand-name">HealthConnect</span>
         </div>
 
         <div className="auth-card">

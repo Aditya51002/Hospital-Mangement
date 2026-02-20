@@ -17,5 +17,6 @@ export const bookAppointment = (data) => API.post('/appointments', data)
 export const getMyAppointments = () => API.get('/appointments')
 export const getAllAppointments = () => API.get('/appointments/all')
 export const updateAppointmentStatus = (id, status) => API.put(`/appointments/${id}`, { status })
+export const getAllDoctors = () => API.get('/appointments/doctors')
 
 export default API

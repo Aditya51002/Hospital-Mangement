@@ -1,24 +1,32 @@
 import { useState } from 'react'
-import { DOCTORS, DEPARTMENTS, TIME_SLOTS } from '../data/doctors'
-import { bookAppointment } from '../services/api'
+import { DEPARTMENTS, TIME_SLOTS } from '../data/doctors'
+import { bookAppointment, getAllDoctors } from '../services/api'
 import toast from 'react-hot-toast'
 
 export default function BookAppointment({ onBooked }) {
   const [form, setForm] = useState({
     department: '',
-    doctorName: '',
+    doctorId: '',
     date: '',
     timeSlot: ''
   })
   const [loading, setLoading] = useState(false)
+  const [doctors, setDoctors] = useState([])
 
-  // Filter doctors by selected department
-  const filteredDoctors = form.department
-    ? DOCTORS.filter((d) => d.department === form.department)
-    : DOCTORS
-
-  const handleDeptChange = (e) => {
-    setForm({ ...form, department: e.target.value, doctorName: '' })
+  const handleDeptChange = async (e) => {
+    const department = e.target.value
+    setForm({ ...form, department, doctorId: '' })
+    if (department) {
+      try {
+        const response = await getAllDoctors()
+        setDoctors(response.data.doctors)
+      } catch (err) {
+        toast.error('Failed to load doctors')
+        setDoctors([])
+      }
+    } else {
+      setDoctors([])
+    }
   }
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
@@ -28,14 +36,15 @@ export default function BookAppointment({ onBooked }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.department || !form.doctorName || !form.date || !form.timeSlot) {
+    if (!form.department || !form.doctorId || !form.date || !form.timeSlot) {
       return toast.error('Please fill all fields')
     }
     setLoading(true)
     try {
       await bookAppointment(form)
       toast.success('Appointment booked successfully!')
-      setForm({ department: '', doctorName: '', date: '', timeSlot: '' })
+      setForm({ department: '', doctorId: '', date: '', timeSlot: '' })
+      setDoctors([])
       onBooked?.()
     } catch (err) {
       toast.error(err.response?.data?.message || 'Booking failed')
@@ -87,10 +96,10 @@ export default function BookAppointment({ onBooked }) {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
-              <select name="doctorName" value={form.doctorName} onChange={handleChange}>
+              <select name="doctorId" value={form.doctorId} onChange={handleChange}>
                 <option value="">Select Doctor</option>
-                {filteredDoctors.map((doc) => (
-                  <option key={doc.name} value={doc.name}>
+                {doctors.map((doc) => (
+                  <option key={doc._id} value={doc._id}>
                     {doc.name}
                   </option>
                 ))}

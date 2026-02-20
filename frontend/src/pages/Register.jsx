@@ -2,20 +2,26 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { DEPARTMENTS } from '../data/doctors'
 import toast from 'react-hot-toast'
 
 export default function Register() {
   const navigate = useNavigate()
   const { login } = useAuth()
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'patient' })
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'patient', department: '' })
   const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
+
+  const handleRoleChange = (role) => setForm({ ...form, role, department: role === 'patient' ? '' : form.department })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name || !form.email || !form.password) {
       return toast.error('Please fill all fields')
+    }
+    if (form.role === 'doctor' && !form.department) {
+      return toast.error('Please select a department')
     }
     if (form.password.length < 6) return toast.error('Password must be at least 6 characters')
     setLoading(true)
@@ -47,7 +53,7 @@ export default function Register() {
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg>
           </div>
-          <span className="brand-name">MediCare</span>
+          <span className="brand-name">HealthConnect</span>
         </div>
 
         <div className="auth-card">
@@ -62,7 +68,7 @@ export default function Register() {
               <button
                 type="button"
                 className={`role-btn ${form.role === 'patient' ? 'active' : ''}`}
-                onClick={() => setForm({ ...form, role: 'patient' })}
+                onClick={() => handleRoleChange('patient')}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -73,7 +79,7 @@ export default function Register() {
               <button
                 type="button"
                 className={`role-btn ${form.role === 'doctor' ? 'active' : ''}`}
-                onClick={() => setForm({ ...form, role: 'doctor' })}
+                onClick={() => handleRoleChange('doctor')}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -133,6 +139,26 @@ export default function Register() {
                 />
               </div>
             </div>
+
+            {form.role === 'doctor' && (
+              <div className="form-group">
+                <label>Department</label>
+                <div className="select-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                  <select name="department" value={form.department} onChange={handleChange}>
+                    <option value="">Select Department</option>
+                    {DEPARTMENTS.map((dept) => (
+                      <option key={dept} value={dept}>
+                        {dept}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
 
             <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? <span className="btn-spinner" /> : 'Create Account'}
