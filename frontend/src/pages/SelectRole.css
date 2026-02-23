@@ -1,0 +1,80 @@
+/* Dynamic UI for SelectRole page */
+.select-role-card {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.06);
+}
+
+.auth-card-header h1 {
+  font-size: 26px;
+  font-weight: 750;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.auth-card-header p {
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.role-cards {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.role-card {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(2,132,199,0.08);
+  padding: 32px 24px;
+  width: 220px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  text-align: center;
+  border: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.role-card:hover {
+  box-shadow: 0 8px 24px rgba(2,132,199,0.18);
+  transform: translateY(-4px) scale(1.04);
+  border-color: var(--primary);
+}
+
+.role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #e0f2fe, #ccfbf1);
+}
+.role-icon.patient {
+  background: linear-gradient(135deg, #e0f2fe, #ccfbf1);
+}
+.role-icon.doctor {
+  background: linear-gradient(135deg, #dbeafe, #a5f3fc);
+}
+.role-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--primary-dark);
+}
+.role-card h3 {
+  margin-bottom: 12px;
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 700;
+}
+.role-card p {
+  color: var(--text-2);
+  font-size: 14px;
+}

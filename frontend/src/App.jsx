@@ -4,6 +4,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import PatientDashboard from './pages/PatientDashboard'
 import DoctorDashboard from './pages/DoctorDashboard'
+import SelectRole from './pages/SelectRole'
 
 const PrivateRoute = ({ children, allowedRole }) => {
   const { user, loading } = useAuth()
@@ -25,7 +26,7 @@ const PublicRoute = ({ children }) => {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<SelectRole />} />
       <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
       <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
       <Route
@@ -36,7 +37,7 @@ function AppRoutes() {
         path="/doctor"
         element={<PrivateRoute allowedRole="doctor"><DoctorDashboard /></PrivateRoute>}
       />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
