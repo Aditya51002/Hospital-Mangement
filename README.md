@@ -5,7 +5,7 @@ A full-stack MERN Medical Appointment Management System with Role-Based Access C
 ## Tech Stack
 - **Frontend**: React 18 + Vite + React Router + Axios
 - **Backend**: Node.js + Express
-- **Database**: MongoDB (mongodb://localhost:27017/hospital)
+- **Database**: MongoDB 
 - **Auth**: JWT + bcryptjs
 
 ## Getting Started
