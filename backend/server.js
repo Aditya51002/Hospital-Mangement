@@ -12,7 +12,10 @@ seedDoctors();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "https://hospital-frontend.onrender.com",
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
